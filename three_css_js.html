@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Smart Contact Form</title>
+<title>Multi-Step Form</title>
 
 <style>
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #1e3a8a, #06b6d4);
+    font-family: Arial;
+    background: linear-gradient(120deg, #0f172a, #2563eb);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,190 +14,158 @@ body {
     margin: 0;
 }
 
-.form-container {
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 15px;
-    width: 360px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-    animation: fadeIn 0.6s ease-in-out;
+.container {
+    background: white;
+    padding: 25px;
+    width: 380px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #1e3a8a;
+.step {
+    display: none;
 }
 
-/* Floating input */
-.input-group {
-    position: relative;
-    margin-bottom: 20px;
+.step.active {
+    display: block;
 }
 
-.input-group input,
-.input-group textarea {
+.progress {
+    height: 6px;
+    background: #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 33%;
+    background: #2563eb;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+input, textarea {
     width: 100%;
     padding: 10px;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    outline: none;
-    background: transparent;
+    margin-top: 10px;
 }
 
-.input-group label {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    color: #777;
-    transition: 0.3s;
-}
-
-.input-group input:focus + label,
-.input-group input:valid + label,
-.input-group textarea:focus + label,
-.input-group textarea:valid + label {
-    top: -10px;
-    font-size: 12px;
-    color: #06b6d4;
-}
-
-.input-group input:focus,
-.input-group textarea:focus {
-    border-bottom: 2px solid #06b6d4;
-}
-
-/* Error */
-.error {
-    color: red;
-    font-size: 12px;
-}
-
-/* Character counter */
-.counter {
-    font-size: 12px;
-    text-align: right;
-    color: #555;
-}
-
-/* Button */
 button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 25px;
-    background: linear-gradient(135deg, #06b6d4, #1e3a8a);
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* Success message */
-.success {
     margin-top: 15px;
     padding: 10px;
-    background: #dcfce7;
-    color: #166534;
-    border-left: 4px solid green;
-    border-radius: 6px;
-    animation: pop 0.5s ease;
+    width: 100%;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(15px);}
-    to {opacity: 1; transform: translateY(0);}
+.preview {
+    background: #f1f5f9;
+    padding: 10px;
+    margin-top: 10px;
 }
 
-@keyframes pop {
-    from {transform: scale(0.9); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
+.list {
+    margin-top: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 13px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="form-container">
-    <h2>Contact Me</h2>
+<div class="container">
 
-    <form id="myForm">
+<div class="progress">
+    <div class="progress-bar" id="bar"></div>
+</div>
 
-        <div class="input-group">
-            <input type="text" id="name" required>
-            <label>Name</label>
-            <div class="error" id="nameError"></div>
-        </div>
+<form id="form">
 
-        <div class="input-group">
-            <input type="text" id="email" required>
-            <label>Email</label>
-            <div class="error" id="emailError"></div>
-        </div>
+    <!-- Step 1 -->
+    <div class="step active">
+        <h3>Step 1: Name</h3>
+        <input type="text" id="name" placeholder="Enter Name">
+        <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-        <div class="input-group">
-            <textarea id="message" required></textarea>
-            <label>Message</label>
-            <div class="counter" id="counter">0/100</div>
-            <div class="error" id="msgError"></div>
-        </div>
+    <!-- Step 2 -->
+    <div class="step">
+        <h3>Step 2: Email</h3>
+        <input type="text" id="email" placeholder="Enter Email">
+        <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-        <button type="submit">Send Message</button>
-    </form>
+    <!-- Step 3 -->
+    <div class="step">
+        <h3>Step 3: Message</h3>
+        <textarea id="message" placeholder="Enter Message"></textarea>
+        <button type="button" onclick="showPreview()">Preview</button>
+    </div>
 
-    <div id="output"></div>
+    <!-- Preview -->
+    <div class="step">
+        <h3>Preview</h3>
+        <div class="preview" id="preview"></div>
+        <button type="submit">Submit</button>
+    </div>
+
+</form>
+
+<div class="list" id="dataList"></div>
+
 </div>
 
 <script>
-const messageField = document.getElementById("message");
-const counter = document.getElementById("counter");
+let current = 0;
+let steps = document.querySelectorAll(".step");
 
-messageField.addEventListener("input", () => {
-    counter.textContent = messageField.value.length + "/100";
-});
+function nextStep() {
+    steps[current].classList.remove("active");
+    current++;
+    steps[current].classList.add("active");
+    updateBar();
+}
 
-document.getElementById("myForm").addEventListener("submit", function(e) {
+function updateBar() {
+    document.getElementById("bar").style.width = (current+1)*25 + "%";
+}
+
+function showPreview() {
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let message = document.getElementById("message").value;
+
+    document.getElementById("preview").innerHTML = `
+        Name: ${name} <br>
+        Email: ${email} <br>
+        Message: ${message}
+    `;
+
+    nextStep();
+}
+
+document.getElementById("form").addEventListener("submit", function(e){
     e.preventDefault();
 
-    let name = name.value.trim();
-    let email = email.value.trim();
-    let message = messageField.value.trim();
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let message = document.getElementById("message").value;
 
-    let isValid = true;
+    let entry = `<div>👤 ${name} | 📧 ${email}</div>`;
 
-    document.getElementById("nameError").textContent = "";
-    document.getElementById("emailError").textContent = "";
-    document.getElementById("msgError").textContent = "";
+    document.getElementById("dataList").innerHTML += entry;
 
-    if (!/^[A-Za-z ]+$/.test(name)) {
-        document.getElementById("nameError").textContent = "Only letters allowed";
-        isValid = false;
-    }
-
-    if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)) {
-        document.getElementById("emailError").textContent = "Invalid email";
-        isValid = false;
-    }
-
-    if (message.length < 5) {
-        document.getElementById("msgError").textContent = "Minimum 5 characters";
-        isValid = false;
-    }
-
-    if (isValid) {
-        document.getElementById("output").innerHTML = `
-            <div class="success">
-                ✅ Message Sent Successfully!
-            </div>
-        `;
-        document.getElementById("myForm").reset();
-        counter.textContent = "0/100";
-    }
+    // reset form
+    this.reset();
+    steps[current].classList.remove("active");
+    current = 0;
+    steps[current].classList.add("active");
+    updateBar();
 });
 </script>
 
