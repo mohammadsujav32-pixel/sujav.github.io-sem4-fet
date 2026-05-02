@@ -1,161 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Form | Details</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+<title>Smart Contact Form</title>
 
-        .form-container {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            width: 350px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: fadeIn 0.6s ease-in-out;
-        }
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1e3a8a, #06b6d4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #1e3a8a;
-        }
+.form-container {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    width: 360px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+    animation: fadeIn 0.6s ease-in-out;
+}
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-            transition: 0.3s;
-            font-size: 14px;
-        }
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
 
-        input:focus, textarea:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 5px rgba(59,130,246,0.5);
-        }
+/* Floating input */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
 
-        textarea {
-            resize: none;
-            height: 80px;
-        }
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    background: transparent;
+}
 
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    color: #777;
+    transition: 0.3s;
+}
 
-        button:hover {
-            transform: scale(1.03);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+.input-group input:focus + label,
+.input-group input:valid + label,
+.input-group textarea:focus + label,
+.input-group textarea:valid + label {
+    top: -10px;
+    font-size: 12px;
+    color: #06b6d4;
+}
 
-        .error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 3px;
-        }
+.input-group input:focus,
+.input-group textarea:focus {
+    border-bottom: 2px solid #06b6d4;
+}
 
-        .output {
-            margin-top: 15px;
-            background: #f0f9ff;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 4px solid #3b82f6;
-            font-size: 14px;
-        }
+/* Error */
+.error {
+    color: red;
+    font-size: 12px;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+/* Character counter */
+.counter {
+    font-size: 12px;
+    text-align: right;
+    color: #555;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #06b6d4, #1e3a8a);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Success message */
+.success {
+    margin-top: 15px;
+    padding: 10px;
+    background: #dcfce7;
+    color: #166534;
+    border-left: 4px solid green;
+    border-radius: 6px;
+    animation: pop 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+@keyframes pop {
+    from {transform: scale(0.9); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+</style>
 </head>
+
 <body>
 
 <div class="form-container">
-    <h2>Contact Form</h2>
+    <h2>Contact Me</h2>
+
     <form id="myForm">
-        <input type="text" id="name" placeholder="Enter Name">
-        <div class="error" id="nameError"></div>
 
-        <input type="text" id="email" placeholder="Enter Email">
-        <div class="error" id="emailError"></div>
+        <div class="input-group">
+            <input type="text" id="name" required>
+            <label>Name</label>
+            <div class="error" id="nameError"></div>
+        </div>
 
-        <textarea id="message" placeholder="Enter Message"></textarea>
-        <div class="error" id="msgError"></div>
+        <div class="input-group">
+            <input type="text" id="email" required>
+            <label>Email</label>
+            <div class="error" id="emailError"></div>
+        </div>
 
-        <button type="submit">Submit</button>
+        <div class="input-group">
+            <textarea id="message" required></textarea>
+            <label>Message</label>
+            <div class="counter" id="counter">0/100</div>
+            <div class="error" id="msgError"></div>
+        </div>
+
+        <button type="submit">Send Message</button>
     </form>
 
-    <div class="output" id="output"></div>
+    <div id="output"></div>
 </div>
 
 <script>
+const messageField = document.getElementById("message");
+const counter = document.getElementById("counter");
+
+messageField.addEventListener("input", () => {
+    counter.textContent = messageField.value.length + "/100";
+});
+
 document.getElementById("myForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    let name = document.getElementById("name").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let message = document.getElementById("message").value.trim();
-
-    let nameError = document.getElementById("nameError");
-    let emailError = document.getElementById("emailError");
-    let msgError = document.getElementById("msgError");
-
-    nameError.textContent = "";
-    emailError.textContent = "";
-    msgError.textContent = "";
+    let name = name.value.trim();
+    let email = email.value.trim();
+    let message = messageField.value.trim();
 
     let isValid = true;
 
-    let namePattern = /^[A-Za-z ]+$/;
-    if (name === "") {
-        nameError.textContent = "Name is required";
-        isValid = false;
-    } else if (!namePattern.test(name)) {
-        nameError.textContent = "Only letters allowed";
+    document.getElementById("nameError").textContent = "";
+    document.getElementById("emailError").textContent = "";
+    document.getElementById("msgError").textContent = "";
+
+    if (!/^[A-Za-z ]+$/.test(name)) {
+        document.getElementById("nameError").textContent = "Only letters allowed";
         isValid = false;
     }
 
-    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    if (email === "") {
-        emailError.textContent = "Email is required";
-        isValid = false;
-    } else if (!emailPattern.test(email)) {
-        emailError.textContent = "Invalid email format";
+    if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)) {
+        document.getElementById("emailError").textContent = "Invalid email";
         isValid = false;
     }
 
     if (message.length < 5) {
-        msgError.textContent = "Message must be at least 5 characters";
+        document.getElementById("msgError").textContent = "Minimum 5 characters";
         isValid = false;
     }
 
     if (isValid) {
-        let result = `
-            <strong>Name:</strong> ${name} <br>
-            <strong>Email:</strong> ${email} <br>
-            <strong>Message:</strong> ${message}
+        document.getElementById("output").innerHTML = `
+            <div class="success">
+                ✅ Message Sent Successfully!
+            </div>
         `;
-        document.getElementById("output").innerHTML = result;
+        document.getElementById("myForm").reset();
+        counter.textContent = "0/100";
     }
 });
 </script>
